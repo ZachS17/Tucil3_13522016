@@ -7,13 +7,21 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.*;
 
 interface AlgorithmCall {
     void solve(String kataAwal, String kataAkhir);
 }
 
-public class Algorithm {
-    public void isWordValid(String kata) {
+abstract class Algorithm implements AlgorithmCall {
+    // nilai evaluasi
+    protected ArrayList<Integer> evalValues;
+    // path yang sudah dijalani (cek string terakhir setiap elemen)
+    protected ArrayList<ArrayList<String>> possibleSolutions;
+    // list dari kata yang sudah diexpand
+    protected ArrayList<String> expandedList;
+
+    public boolean isWordValid(String kata) {
         // try {
         // // Initialize ExtJWNL dictionary
         // Dictionary dictionary = Dictionary.getDefaultResourceInstance();
@@ -52,16 +60,28 @@ public class Algorithm {
             // Print result
             if (found) {
                 System.out.println("Word '" + kata + "' found in the text file.");
+                return true;
             } else {
                 System.out.println("Word '" + kata + "' not found in the text file.");
+                return false;
             }
         } catch (IOException e) {
             System.err.println("Error reading the file: " + e.getMessage());
+            return false;
         }
     }
 
+    abstract public void solve(String kataAwal, String kataAkhir);
+
+    abstract public int evaluationFunction(String kata);
+
     public static void main(String[] args) {
-        Algorithm game = new Algorithm();
-        game.isWordValid("wat");
+    }
+
+    // hanya untuk possibleSolutions
+    public String lastElementStringList(int index) {
+        // stringArray pada index tertentu
+        ArrayList<String> stringArray = possibleSolutions.get(index);
+        return stringArray.get(stringArray.size() - 1);
     }
 }
