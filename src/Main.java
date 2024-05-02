@@ -5,16 +5,15 @@
 import java.util.*;
 
 public class Main {
-    private String kataAwal;
-    private String kataAkhir;
-
     public void start() {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Masukkan kata awal: ");
-        this.kataAwal = scanner.next();
+        String kataAwal = scanner.next();
         System.out.print("Masukkan kata tujuan: ");
-        this.kataAkhir = scanner.next();
+        String kataAkhir = scanner.next();
         scanner.close();
+        UCS tempAlgorithm = new UCS(kataAwal, kataAkhir);
+        tempAlgorithm.solve();
     }
 
     public void end() {
@@ -25,5 +24,6 @@ public class Main {
     public static void main(String[] args) {
         Main game = new Main();
         game.start();
+        game.end();
     }
 }

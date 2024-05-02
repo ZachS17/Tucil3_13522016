@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.*;
 
 interface AlgorithmCall {
-    void solve(String kataAwal, String kataAkhir);
+    void solve();
 }
 
 abstract class Algorithm implements AlgorithmCall {
@@ -20,6 +20,14 @@ abstract class Algorithm implements AlgorithmCall {
     protected ArrayList<ArrayList<String>> possibleSolutions;
     // list dari kata yang sudah diexpand
     protected ArrayList<String> expandedList;
+    // list dari index yang terakhir diubah untuk keep track karena jika terakhir
+    // diubah tidak akan langsung diubah
+    protected ArrayList<Integer> lastIndexChange;
+
+    // kata awal
+    protected String initialWord;
+    // kata akhir
+    protected String targetWord;
 
     public boolean isWordValid(String kata) {
         // try {
@@ -71,17 +79,44 @@ abstract class Algorithm implements AlgorithmCall {
         }
     }
 
-    abstract public void solve(String kataAwal, String kataAkhir);
+    // fungsi mendapatkan yang paling kecil nilai hasil evaluation functionnya
+    public int smallestEvalIndex() {
+        int minValue = evalValues.get(0);
+        String minString = lastStringAtIndex(0);
+        int i = 0;
+        for (i = 1; i < evalValues.size(); i++) {
+            // kalau nilai lebih kecil otomatis menjadi min
+            if (evalValues.get(i) < minValue) {
+                minValue = evalValues.get(i);
+                minString = lastStringAtIndex(i);
+            }
+            // kalau nilainya sama maka secara alfabet
+            else if (evalValues.get(i) == minValue) {
+                int j = 0;
+                boolean canDetermined = false;
+                while (j < minString.length()
+                        && j < lastStringAtIndex(i).length()
+                        && !canDetermined) {
+                    if (lastStringAtIndex(i).charAt(j) < minString
+                            .charAt(j)) {
+                        minValue = evalValues.get(i);
+                        minString = lastStringAtIndex(i);
+                    }
+                    j++;
+                }
+            }
+        }
+        return i;
+    }
+
+    public String lastStringAtIndex(int index) {
+        return possibleSolutions.get(index).get(possibleSolutions.get(index).size() - 1);
+    }
+
+    abstract public void solve();
 
     abstract public int evaluationFunction(String kata);
 
     public static void main(String[] args) {
-    }
-
-    // hanya untuk possibleSolutions
-    public String lastElementStringList(int index) {
-        // stringArray pada index tertentu
-        ArrayList<String> stringArray = possibleSolutions.get(index);
-        return stringArray.get(stringArray.size() - 1);
     }
 }
