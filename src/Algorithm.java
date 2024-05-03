@@ -15,14 +15,14 @@ interface AlgorithmCall {
 
 abstract class Algorithm implements AlgorithmCall {
     // nilai evaluasi
-    protected ArrayList<Integer> evalValues;
+    protected List<Integer> evalValues;
     // path yang sudah dijalani (cek string terakhir setiap elemen)
-    protected ArrayList<ArrayList<String>> possibleSolutions;
+    protected List<List<String>> possibleSolutions;
     // list dari kata yang sudah diexpand
-    protected ArrayList<String> expandedList;
+    protected List<String> expandedList;
     // list dari index yang terakhir diubah untuk keep track karena jika terakhir
     // diubah tidak akan langsung diubah
-    protected ArrayList<Integer> lastIndexChange;
+    protected List<Integer> lastIndexChange;
 
     // kata awal
     protected String initialWord;
@@ -83,8 +83,8 @@ abstract class Algorithm implements AlgorithmCall {
     public int smallestEvalIndex() {
         int minValue = evalValues.get(0);
         String minString = lastStringAtIndex(0);
-        int i = 0;
-        for (i = 1; i < evalValues.size(); i++) {
+        int i;
+        for (i = 0; i < evalValues.size(); i++) {
             // kalau nilai lebih kecil otomatis menjadi min
             if (evalValues.get(i) < minValue) {
                 minValue = evalValues.get(i);
@@ -94,19 +94,40 @@ abstract class Algorithm implements AlgorithmCall {
             else if (evalValues.get(i) == minValue) {
                 int j = 0;
                 boolean canDetermined = false;
+                boolean isSame = false;
                 while (j < minString.length()
                         && j < lastStringAtIndex(i).length()
                         && !canDetermined) {
-                    if (lastStringAtIndex(i).charAt(j) < minString
+                    // kalau dalam iterasi ada yang sudah cocok langsung potong
+                    if (lastStringAtIndex(i).charAt(j) == targetWord.charAt(j)) {
+                        isSame = true;
+                    } else if (lastStringAtIndex(i).charAt(j) < minString
                             .charAt(j)) {
                         minValue = evalValues.get(i);
                         minString = lastStringAtIndex(i);
+                        canDetermined = true;
                     }
                     j++;
                 }
+                // ada huruf yang cocok -> langsung
+                if (isSame) {
+                    return i;
+                }
             }
         }
-        return i;
+        // berbeda semua
+        return 0;
+    }
+
+    public boolean isExpanded(String word) {
+        int i = 0;
+        while (i < expandedList.size()) {
+            if (word == expandedList.get(i)) {
+                return true;
+            }
+            i++;
+        }
+        return false;
     }
 
     public String lastStringAtIndex(int index) {
@@ -115,7 +136,7 @@ abstract class Algorithm implements AlgorithmCall {
 
     abstract public void solve();
 
-    abstract public int evaluationFunction(String kata);
+    // abstract public int evaluationFunction(String kata);
 
     public static void main(String[] args) {
     }
