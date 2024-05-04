@@ -11,6 +11,12 @@ import java.util.*;
 
 interface AlgorithmCall {
     void solve();
+
+    int evaluationFunctionUCS();
+
+    int evaluationFunctionGBFS();
+
+    int evaluationFunctionAStar();
 }
 
 abstract class Algorithm implements AlgorithmCall {
@@ -20,6 +26,8 @@ abstract class Algorithm implements AlgorithmCall {
     protected List<List<String>> possibleSolutions;
     // list dari kata yang sudah diexpand
     protected List<String> expandedList;
+    // list dari kata yang sudah pernah dikunjungi agar tidak usah lagi
+    protected List<String> visitedList;
     // list dari index yang terakhir diubah untuk keep track karena jika terakhir
     // diubah tidak akan langsung diubah
     protected List<Integer> lastIndexChange;
@@ -90,28 +98,57 @@ abstract class Algorithm implements AlgorithmCall {
                 minValue = evalValues.get(i);
                 minString = lastStringAtIndex(i);
             }
-            // kalau nilainya sama maka secara alfabet
+            // kalau nilainya sama maka secara alfabet kecuali sudah sama persis dengan
+            // string target
             else if (evalValues.get(i) == minValue) {
-                int j = 0;
-                boolean canDetermined = false;
-                boolean isSame = false;
-                while (j < minString.length()
-                        && j < lastStringAtIndex(i).length()
-                        && !canDetermined) {
-                    // kalau dalam iterasi ada yang sudah cocok langsung potong
-                    if (lastStringAtIndex(i).charAt(j) == targetWord.charAt(j)) {
-                        isSame = true;
-                    } else if (lastStringAtIndex(i).charAt(j) < minString
-                            .charAt(j)) {
-                        minValue = evalValues.get(i);
-                        minString = lastStringAtIndex(i);
-                        canDetermined = true;
-                    }
-                    j++;
-                }
-                // ada huruf yang cocok -> langsung
-                if (isSame) {
+                // int j = 0;
+                // boolean canDetermined = false;
+                // boolean isSame = false;
+                // while (j < minString.length()
+                // && j < lastStringAtIndex(i).length()
+                // && !canDetermined) {
+                // // kalau dalam iterasi ada yang sudah cocok langsung potong
+                // if (lastStringAtIndex(i).charAt(j) == targetWord.charAt(j)) {
+                // isSame = true;
+                // } else if (lastStringAtIndex(i).charAt(j) < minString
+                // .charAt(j)) {
+                // minValue = evalValues.get(i);
+                // minString = lastStringAtIndex(i);
+                // canDetermined = true;
+                // }
+                // j++;
+                // }
+                // // ada huruf yang cocok -> langsung
+                // if (isSame) {
+                // return i;
+                // }
+
+                // sama
+                if (lastStringAtIndex(i).equals(targetWord)) {
                     return i;
+                }
+                // perbedaan huruf yang diteliti sama -> dari kecil
+                else {
+                    int j = 0;
+                    while (true) {
+                        // ketemu lebih kecil (alfabetis)
+                        if (j == minString.length()) {
+                            break;
+                        }
+                        if (lastStringAtIndex(i).charAt(j) < minString.charAt(j)) {
+                            minValue = evalValues.get(i);
+                            minString = lastStringAtIndex(i);
+                            break;
+                        } else if (lastStringAtIndex(i).charAt(j) > minString.charAt(j)) {
+                            break;
+                        } else if (lastStringAtIndex(i).charAt(j) == targetWord.charAt(j)
+                                && minString.charAt(j) != targetWord.charAt(j)) {
+                            minValue = evalValues.get(i);
+                            minString = lastStringAtIndex(i);
+                            break;
+                        }
+                        j++;
+                    }
                 }
             }
         }
@@ -119,10 +156,31 @@ abstract class Algorithm implements AlgorithmCall {
         return 0;
     }
 
+    public int numCharDiff(String word1, String word2) {
+        int num = 0;
+        for (int i = 0; i < word1.length(); i++) {
+            if (word1.charAt(i) != word2.charAt(i)) {
+                num++;
+            }
+        }
+        return num;
+    }
+
     public boolean isExpanded(String word) {
         int i = 0;
         while (i < expandedList.size()) {
             if (word == expandedList.get(i)) {
+                return true;
+            }
+            i++;
+        }
+        return false;
+    }
+
+    public boolean isVisited(String word) {
+        int i = 0;
+        while (i < visitedList.size()) {
+            if (word == visitedList.get(i)) {
                 return true;
             }
             i++;

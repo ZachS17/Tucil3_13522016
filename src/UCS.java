@@ -13,6 +13,7 @@ public class UCS extends Algorithm {
         this.evalValues = new ArrayList<>();
         this.possibleSolutions = new ArrayList<List<String>>();
         this.expandedList = new ArrayList<>();
+        this.visitedList = new ArrayList<>();
         this.lastIndexChange = new ArrayList<>();
     }
 
@@ -35,7 +36,7 @@ public class UCS extends Algorithm {
             List<String> listExpanded = new ArrayList<>(possibleSolutions.get(indexExpanded));
             // System.out.println(listExpanded);
             // kata diexpand
-            String wordExpanded = listExpanded.get(listExpanded.size() - 1);
+            String wordExpanded = new String(listExpanded.get(listExpanded.size() - 1));
             // System.out.println(wordExpanded);
             // prosedur ekspansi
             // jika elemen terakhir pada path sudah sesuai -> ketemu
@@ -45,16 +46,17 @@ public class UCS extends Algorithm {
                 break;
             } else // ekspansi string terakhir pada indeks 0
             {
-                // belum diekspansi
+                // katanya belum diekspansi
                 if (!isExpanded(lastStringAtIndex(smallestEvalIndex()))) {
-                    // iterasi huruf dari yang terakhir diexpand
-                    int i = lastIndexChange.get(indexExpanded);
+                    // iterasi huruf dari yang terakhir diexpand (langsung mulai dari berikutnya)
+                    int i = lastIndexChange.get(indexExpanded) + 1;
                     // System.out.println(i);
-                    // kata sudah diekspansi atau tidak
+                    // mencatat pengulangan dan ada kata yang sudah diekspansi atau tidak
                     boolean hasExpanded = false;
                     boolean cycle = false;
-                    while (!hasExpanded && i < wordExpanded.length()) // selama huruf yang diubah belum valid dan belum
-                                                                      // diexpand
+                    System.out.println("Indeks diubah: " + i);
+                    while (!hasExpanded && i <= wordExpanded.length()) // selama huruf yang diubah belum valid dan belum
+                                                                       // diexpand
                     // semua kemungkinan huruf dari situ
                     {
                         // reset kalau melebihi
@@ -62,10 +64,10 @@ public class UCS extends Algorithm {
                             i = 0;
                             cycle = true;
                         }
-                        // belum ada yang diubah (awal)
-                        if (i == -1) {
-                            i = 0;
-                        }
+                        // // belum ada yang diubah (awal)
+                        // if (i == -1) {
+                        // i = 0;
+                        // }
                         // lanjut proses ekspansi
 
                         // sudah melewati akhir dan sama dengan awal mula (tinggal itu yang perlu
@@ -79,14 +81,14 @@ public class UCS extends Algorithm {
                                 for (char c = 'a'; c <= 'z'; c++) { // dari huruf pertama sampai akhir (semua
                                                                     // kemungkinan)
                                     // dicopy kata yang mau diexpand karena mau diubah huruf-hurufnya
-                                    String copywordExpanded = wordExpanded;
+                                    String copywordExpanded = new String(wordExpanded);
                                     System.out.println("Copy Word:" + copywordExpanded);
                                     // dicopy juga path yang dengan kata yang diexpand
                                     List<String> copyListExpanded = new ArrayList<>(listExpanded);
                                     System.out.println("Copy List:" + copyListExpanded);
                                     // buat string baru
-                                    String modifiedwordExpanded = copywordExpanded.substring(0, i) + c
-                                            + copywordExpanded.substring(i + 1);
+                                    String modifiedwordExpanded = new String(copywordExpanded.substring(0, i) + c
+                                            + copywordExpanded.substring(i + 1));
                                     System.out.println("Modified word:" + modifiedwordExpanded);
                                     if (isWordValid(modifiedwordExpanded)
                                             && modifiedwordExpanded.charAt(i) != wordExpanded.charAt(i)
@@ -105,13 +107,14 @@ public class UCS extends Algorithm {
                                         // tambah ke array value untuk nilai evaluasinya
                                         evalValues.add(evaluationFunctionUCS(indexExpanded));
                                         // tambah ke lastIndex yaitu indeks saat ini
-                                        lastIndexChange.add(lastIndexChange.get(indexExpanded) + 1);
+                                        lastIndexChange.add(i);
                                         // ubah terminator ketika berhasil mengubah huruf
                                         hasExpanded = true;
                                         // // reset
                                         // System.out.println("Copy List(before removal:" + copyListExpanded);
                                         // copyListExpanded.remove(copyListExpanded.size() - 1);
                                         // System.out.println("Copy list after removal: " + copyListExpanded);
+                                        visitedList.add(modifiedwordExpanded);
                                     }
                                 }
                             }
