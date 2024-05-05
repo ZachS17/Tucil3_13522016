@@ -70,6 +70,7 @@ abstract public class Algorithm {
                         System.out.println(words);
                     }
                     System.out.println(expandedTuple.getWord());
+                    System.out.println("Banyak node yang dikunjungi: " + expandedTuple.getPrev().size());
                     break;
                 } else // ekspansi pertama sesuai priority queue
                 {
