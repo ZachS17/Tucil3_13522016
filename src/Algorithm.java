@@ -11,16 +11,16 @@ import java.util.*;
 
 abstract class Algorithm {
     // nilai evaluasi
-    protected List<Integer> evalValues;
+    protected static List<Integer> evalValues = new ArrayList<>();
     // path yang sudah dijalani (cek string terakhir setiap elemen)
-    protected List<List<String>> possibleSolutions;
+    protected static List<List<String>> possibleSolutions = new ArrayList<List<String>>();
     // list dari kata yang sudah diexpand
-    protected List<String> expandedList;
+    protected static List<String> expandedList = new ArrayList<>();
     // list dari kata yang sudah pernah dikunjungi agar tidak usah lagi
-    protected List<String> visitedList;
+    protected static List<String> visitedList = new ArrayList<>();
     // list dari index yang terakhir diubah untuk keep track karena jika terakhir
     // diubah tidak akan langsung diubah
-    protected List<Integer> lastIndexChange;
+    protected static List<Integer> lastIndexChange = new ArrayList<>();
 
     // kata awal
     protected String initialWord;
@@ -30,7 +30,7 @@ abstract class Algorithm {
     // tipe algoritma
     protected String algorithmType;
 
-    abstract public int evaluationFunction(int index);
+    abstract int evaluationFunction(int index);
 
     public boolean isWordValid(String kata) {
         // try {
@@ -96,28 +96,6 @@ abstract class Algorithm {
             // kalau nilainya sama maka secara alfabet kecuali sudah sama persis dengan
             // string target
             else if (evalValues.get(i) == minValue) {
-                // int j = 0;
-                // boolean canDetermined = false;
-                // boolean isSame = false;
-                // while (j < minString.length()
-                // && j < lastStringAtIndex(i).length()
-                // && !canDetermined) {
-                // // kalau dalam iterasi ada yang sudah cocok langsung potong
-                // if (lastStringAtIndex(i).charAt(j) == targetWord.charAt(j)) {
-                // isSame = true;
-                // } else if (lastStringAtIndex(i).charAt(j) < minString
-                // .charAt(j)) {
-                // minValue = evalValues.get(i);
-                // minString = lastStringAtIndex(i);
-                // canDetermined = true;
-                // }
-                // j++;
-                // }
-                // // ada huruf yang cocok -> langsung
-                // if (isSame) {
-                // return i;
-                // }
-
                 // sama
                 if (lastStringAtIndex(i).equals(targetWord)) {
                     return i;
@@ -151,31 +129,10 @@ abstract class Algorithm {
         return 0;
     }
 
-    public int numCharDiff(String word1, String word2) {
-        int num = 0;
-        for (int i = 0; i < word1.length(); i++) {
-            if (word1.charAt(i) != word2.charAt(i)) {
-                num++;
-            }
-        }
-        return num;
-    }
-
     public boolean isExpanded(String word) {
         int i = 0;
         while (i < expandedList.size()) {
             if (word == expandedList.get(i)) {
-                return true;
-            }
-            i++;
-        }
-        return false;
-    }
-
-    public boolean isVisited(String word) {
-        int i = 0;
-        while (i < visitedList.size()) {
-            if (word == visitedList.get(i)) {
                 return true;
             }
             i++;
@@ -277,18 +234,7 @@ abstract class Algorithm {
                                         possibleSolutions.add(copyListExpanded);
                                         System.out.println("Psolution (after addition):" + possibleSolutions);
                                         // tambah ke array value untuk nilai evaluasinya
-                                        int evalResult;
-                                        if (algorithmType == "UCS") {
-                                            Algorithm temp = new UCS();
-                                            evalResult = temp.evaluationFunction(indexExpanded);
-                                        } else if (algorithmType == "GBFS") {
-                                            Algorithm temp = new GBFS();
-                                            evalResult = temp.evaluationFunction(indexExpanded);
-                                        } else {
-                                            Algorithm temp = new AStar();
-                                            evalResult = temp.evaluationFunction(indexExpanded);
-                                        }
-                                        evalValues.add(evalResult);
+                                        evalValues.add(evaluationFunction(indexExpanded));
                                         // tambah ke lastIndex yaitu indeks saat ini
                                         lastIndexChange.add(i);
                                         // ubah terminator ketika berhasil mengubah huruf
@@ -297,7 +243,6 @@ abstract class Algorithm {
                                         // System.out.println("Copy List(before removal:" + copyListExpanded);
                                         // copyListExpanded.remove(copyListExpanded.size() - 1);
                                         // System.out.println("Copy list after removal: " + copyListExpanded);
-                                        visitedList.add(modifiedwordExpanded);
                                     }
                                 }
                             }
@@ -323,12 +268,9 @@ abstract class Algorithm {
         }
     }
 
-    public Algorithm() {
-        this.evalValues = new ArrayList<>();
-        this.possibleSolutions = new ArrayList<List<String>>();
-        this.expandedList = new ArrayList<>();
-        this.visitedList = new ArrayList<>();
-        this.lastIndexChange = new ArrayList<>();
+    public Algorithm(String initialWord, String targetWord) {
+        this.initialWord = initialWord;
+        this.targetWord = targetWord;
     }
 
     public static void main(String[] args) {

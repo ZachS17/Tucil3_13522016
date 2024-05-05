@@ -13,6 +13,10 @@ public class UCS extends Algorithm {
         return evalValues.get(indexExpanded) + 1;
     }
 
+    public UCS(String initialWord, String targetWord) {
+        super(initialWord, targetWord);
+    }
+
     // // gbfs
     // public int evaluationFunction(String currentWord) {
     // int evalValue = 0;
