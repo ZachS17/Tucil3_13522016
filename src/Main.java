@@ -8,7 +8,7 @@ public class Main {
         System.out.print("Masukkan kata awal: ");
         String kataAwal = scanner.next();
         while (true) {
-            if (Algorithm.isWordValid(kataAwal)) {
+            if (Algorithm.isWordValid(kataAwal.toLowerCase())) {
                 break;
             } else {
                 System.out.println("Kata tidak ada!");
@@ -19,9 +19,9 @@ public class Main {
         System.out.print("Masukkan kata tujuan: ");
         String kataAkhir = scanner.next();
         while (true) {
-            if (Algorithm.isWordValid(kataAkhir) && kataAwal.length() == kataAkhir.length()) {
+            if (Algorithm.isWordValid(kataAkhir.toLowerCase()) && kataAwal.length() == kataAkhir.length()) {
                 break;
-            } else if (!Algorithm.isWordValid(kataAkhir)) {
+            } else if (!Algorithm.isWordValid(kataAkhir.toLowerCase())) {
                 System.out.println("Kata tidak ada!");
                 System.out.print("Masukkan kata tujuan: ");
                 kataAkhir = scanner.next();
@@ -50,22 +50,22 @@ public class Main {
         }
         scanner.close();
         if (algorithmType == 1) {
-            Algorithm tempAlgorithm = new UCS(kataAwal, kataAkhir);
+            Algorithm tempAlgorithm = new UCS(kataAwal.toLowerCase(), kataAkhir.toLowerCase());
             Instant startTime = Instant.now();
             tempAlgorithm.solve();
             Instant endTime = Instant.now();
             Duration duration = Duration.between(startTime, endTime);
             System.out.println("Waktu eksekusi: " + duration.toMillis() + " ms");
         } else if (algorithmType == 2) {
-            Algorithm tempAlgorithm = new GBFS(kataAwal, kataAkhir);
+            Algorithm tempAlgorithm = new GBFS(kataAwal.toLowerCase(), kataAkhir.toLowerCase());
             Instant startTime = Instant.now();
             tempAlgorithm.solve();
             Instant endTime = Instant.now();
             Duration duration = Duration.between(startTime, endTime);
             System.out.println("Waktu eksekusi: " + duration.toMillis() + " ms");
         } else if (algorithmType == 3) {
-            UCS tempUCS = new UCS(kataAwal, kataAkhir);
-            GBFS tempGBFS = new GBFS(kataAwal, kataAkhir);
+            UCS tempUCS = new UCS(kataAwal.toLowerCase(), kataAkhir.toLowerCase());
+            GBFS tempGBFS = new GBFS(kataAwal.toLowerCase(), kataAkhir.toLowerCase());
             Algorithm tempAlgorithm = new AStar(tempUCS, tempGBFS);
             Instant startTime = Instant.now();
             tempAlgorithm.solve();

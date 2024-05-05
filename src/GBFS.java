@@ -5,12 +5,17 @@ public class GBFS extends Algorithm {
         super(initialWord, targetWord);
     }
 
+    // tidak ada karena GBFS
+    public int evalFuncG(int indexExpanded) {
+        return 0;
+    }
+
     // jumlah huruf saat ini yang berbeda dengan target
     // lebih kecil -> semakin baik
-    public int evaluationFunction(int indexExpanded) {
+    public int evalFuncH(String word) {
         int num = 0;
         for (int i = 0; i < targetWord.length(); i++) {
-            if (lastStringAtIndex(indexExpanded).charAt(i) != targetWord.charAt(i)) {
+            if (word.charAt(i) != targetWord.charAt(i)) {
                 num++;
             }
         }

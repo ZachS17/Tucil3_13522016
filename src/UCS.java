@@ -7,7 +7,12 @@ public class UCS extends Algorithm {
 
     // banyaknya perubahan (perubahan seminimal mungkin)
     // lebih kecil -> semakin baik
-    public int evaluationFunction(int indexExpanded) {
+    public int evalFuncG(int indexExpanded) {
         return evalValues.get(indexExpanded) + 1;
+    }
+
+    // tidak ada karena UCS
+    public int evalFuncH(String word) {
+        return 0;
     }
 }

@@ -10,12 +10,13 @@ public class AStar extends Algorithm {
         this.gbfs = gbfsTemp;
     }
 
-    @Override
-    public int evaluationFunction(int indexExpanded) {
-        // panggil dari kelas masing-masing
-        // semakin kecil -> semakin baik
-        int ucsResult = ucs.evaluationFunction(indexExpanded);
-        int gbfsResult = gbfs.evaluationFunction(indexExpanded);
-        return ucsResult + gbfsResult;
+    // fungsi G dari UCS
+    public int evalFuncG(int indexExpanded) {
+        return ucs.evalFuncG(indexExpanded);
+    }
+
+    // fungsi H dari GBFS
+    public int evalFuncH(String word) {
+        return gbfs.evalFuncH(word);
     }
 }
