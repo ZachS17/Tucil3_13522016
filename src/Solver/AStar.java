@@ -1,4 +1,8 @@
+package Solver;
 // gabungan dari UCS dan GBFS
+
+import Utilities.Tuple;
+
 public class AStar extends Algorithm {
     private UCS ucs;
     private GBFS gbfs;
@@ -11,12 +15,12 @@ public class AStar extends Algorithm {
     }
 
     // fungsi G dari UCS
-    public int evalFuncG(int indexExpanded) {
-        return ucs.evalFuncG(indexExpanded);
+    public int evalFuncG(int prevCost) {
+        return ucs.evalFuncG(prevCost);
     }
 
     // fungsi H dari GBFS
-    public int evalFuncH(String word) {
-        return gbfs.evalFuncH(word);
+    public int evalFuncH(Tuple wordTuple) {
+        return gbfs.evalFuncH(wordTuple);
     }
 }

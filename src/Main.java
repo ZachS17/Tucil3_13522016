@@ -1,14 +1,19 @@
 import java.util.*;
+
+import Solver.*;
+import Utilities.Dictionary;
+
 import java.time.Duration;
 import java.time.Instant;
 
 public class Main {
     public void start() {
+        Dictionary.readDictionary();
         Scanner scanner = new Scanner(System.in);
         System.out.print("Masukkan kata awal: ");
         String kataAwal = scanner.next();
         while (true) {
-            if (Algorithm.isWordValid(kataAwal.toLowerCase())) {
+            if (Dictionary.isWordValid(kataAwal.toLowerCase())) {
                 break;
             } else {
                 System.out.println("Kata tidak ada!");
@@ -19,9 +24,9 @@ public class Main {
         System.out.print("Masukkan kata tujuan: ");
         String kataAkhir = scanner.next();
         while (true) {
-            if (Algorithm.isWordValid(kataAkhir.toLowerCase()) && kataAwal.length() == kataAkhir.length()) {
+            if (Dictionary.isWordValid(kataAkhir.toLowerCase()) && kataAwal.length() == kataAkhir.length()) {
                 break;
-            } else if (!Algorithm.isWordValid(kataAkhir.toLowerCase())) {
+            } else if (!Dictionary.isWordValid(kataAkhir.toLowerCase())) {
                 System.out.println("Kata tidak ada!");
                 System.out.print("Masukkan kata tujuan: ");
                 kataAkhir = scanner.next();
