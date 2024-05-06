@@ -1,7 +1,0 @@
-{
-    "java.classpath": [
-        "lib/extjwnl-2.0.5.jar",
-        "lib/extjwnl-data-wn31-1.2.jar",
-        "lib/extjwnl-utilities-2.0.5.jar"
-    ]
-}

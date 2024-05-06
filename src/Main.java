@@ -54,17 +54,20 @@ public class Main {
             }
         }
         scanner.close();
+        List<String> solution = new ArrayList<>();
+        Runtime runtime = Runtime.getRuntime();
+        long initialMemory = runtime.totalMemory() - runtime.freeMemory();
         if (algorithmType == 1) {
             Algorithm tempAlgorithm = new UCS(kataAwal.toLowerCase(), kataAkhir.toLowerCase());
             Instant startTime = Instant.now();
-            tempAlgorithm.solve();
+            solution = tempAlgorithm.solve();
             Instant endTime = Instant.now();
             Duration duration = Duration.between(startTime, endTime);
             System.out.println("Waktu eksekusi: " + duration.toMillis() + " ms");
         } else if (algorithmType == 2) {
             Algorithm tempAlgorithm = new GBFS(kataAwal.toLowerCase(), kataAkhir.toLowerCase());
             Instant startTime = Instant.now();
-            tempAlgorithm.solve();
+            solution = tempAlgorithm.solve();
             Instant endTime = Instant.now();
             Duration duration = Duration.between(startTime, endTime);
             System.out.println("Waktu eksekusi: " + duration.toMillis() + " ms");
@@ -73,11 +76,14 @@ public class Main {
             GBFS tempGBFS = new GBFS(kataAwal.toLowerCase(), kataAkhir.toLowerCase());
             Algorithm tempAlgorithm = new AStar(tempUCS, tempGBFS);
             Instant startTime = Instant.now();
-            tempAlgorithm.solve();
+            solution = tempAlgorithm.solve();
             Instant endTime = Instant.now();
             Duration duration = Duration.between(startTime, endTime);
             System.out.println("Waktu eksekusi: " + duration.toMillis() + " ms");
         }
+        long finalMemory = runtime.totalMemory() - runtime.freeMemory();
+        System.out.println("Total memori: " + (finalMemory - initialMemory) + " bytes");
+        solution.clear();
     }
 
     public void end() {
